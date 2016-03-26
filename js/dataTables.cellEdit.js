@@ -35,7 +35,8 @@ jQuery.fn.dataTable.Api.register('MakeCellsEditable()', function (settings) {
             // Update datatables cell value
             switch($(callingElement).prop('nodeName').toLowerCase()){
                 case 'input':
-                    inputField = callingElement;
+                    inputField = $(callingElement);
+                    console.log(inputField)
                     break;
                 case 'a' :
                     inputField = $(callingElement).siblings('input');
@@ -44,7 +45,7 @@ jQuery.fn.dataTable.Api.register('MakeCellsEditable()', function (settings) {
             _tryToUpdate(inputField.val())
 
             function _tryToUpdate(newValue) {
-                if (!newValue && (settings.allowNulls != true)) {
+                if (!newValue && ((settings.allowNulls) && settings.allowNulls != true)) {
                     console.log(settings.allowNulls)
                     // If columns specified
                     if (settings.allowNulls.columns) {

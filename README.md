@@ -13,7 +13,7 @@
 ..* Default: every column
 3. allowNulls (optional): JSON | boolean
 ..* Description: Determines if the inputs will accept null values.
-..* Default: false
+..* Default: true
 
 
 ### Basic Initialization
