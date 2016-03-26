@@ -17,7 +17,7 @@
 
 
 ### Basic Initialization
-```
+```javascript
 var table =$('#myTable').DataTable();
 
 table.MakeCellsEditable({
