@@ -26,6 +26,8 @@ Property | Type | Default | Example | Details
     });
 ```
 
+<iframe src="https://github.com/ejbeaty/CellEdit/blob/master/example/advanced.html"></iframe>
+
 ### Advancted Initialization
 ```javascript
     var table = $('#myAdvancedTable').DataTable();
