@@ -2,6 +2,7 @@
 ##### A plugin for [DataTables.net](https://datatables.net) 
 ## Overview
 This plugin allows cells within a [DataTable](https://datatables.net/) to be editable. When a cell is click on, an input field will appear. When focus is lost on the input and the underlying DataTable object will be updated and the table will be redrawn. The new value is passed to a callback function, along with it's row, allowing for easy server-side data updates. 
+
 ![Example image](example.png "Example")
 
 ## Usage
