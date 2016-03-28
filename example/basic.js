@@ -9,6 +9,4 @@
     table.MakeCellsEditable({
         "onUpdate": myCallbackFunction
     });
-
-
 });

@@ -8,13 +8,15 @@
 
     table.MakeCellsEditable({
         "onUpdate": myCallbackFunction,
+        "inputCss":'my-input-class',
         "columns": [0,1,2],
         "allowNulls": {
             "columns": [1],
-            "errorClass": 'button'
+            "errorClass": 'error'
         },
         "confirmationButton": { // could also be true
-            "class": 'none'
+            "confirmCss": 'my-confirm-class',
+            "cancelCss": 'my-cancel-class'
         }
     });
 

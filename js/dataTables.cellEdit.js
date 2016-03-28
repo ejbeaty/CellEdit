@@ -22,7 +22,7 @@
  */
 
 jQuery.fn.dataTable.Api.register('MakeCellsEditable()', function (settings) {
-    var table = this.table();   
+    var table = this.table();
 
     jQuery.fn.extend({
 
@@ -33,36 +33,34 @@ jQuery.fn.dataTable.Api.register('MakeCellsEditable()', function (settings) {
             var columnIndex = cell.index().column;
             var inputField;
             // Update datatables cell value
-            switch($(callingElement).prop('nodeName').toLowerCase()){
+            switch ($(callingElement).prop('nodeName').toLowerCase()) {
                 case 'input':
                     inputField = $(callingElement);
                     console.log(inputField)
                     break;
-                case 'a' :
+                case 'a':
                     inputField = $(callingElement).siblings('input');
                     break;
             }
-            _tryToUpdate(inputField.val())
-
-            function _tryToUpdate(newValue) {
-                if (!newValue && ((settings.allowNulls) && settings.allowNulls != true)) {
-                    console.log(settings.allowNulls)
-                    // If columns specified
-                    if (settings.allowNulls.columns) {
-                        // If current column allows nulls
-                        if (settings.allowNulls.columns.indexOf(columnIndex) > -1) {
-                            _update(newValue);
-                        } else {
-                            _addValidationCss();
-                        }
-                    // No columns allow null
-                    } else if (!newValue) {
+            // Update
+            var newValue = inputField.val();
+            if (!newValue && ((settings.allowNulls) && settings.allowNulls != true)) {
+                console.log(settings.allowNulls)
+                // If columns specified
+                if (settings.allowNulls.columns) {
+                    // If current column allows nulls
+                    if (settings.allowNulls.columns.indexOf(columnIndex) > -1) {
+                        _update(newValue);
+                    } else {
                         _addValidationCss();
                     }
-                    //All columns allow null
-                } else {
-                    _update(newValue);
+                    // No columns allow null
+                } else if (!newValue) {
+                    _addValidationCss();
                 }
+                //All columns allow null
+            } else {
+                _update(newValue);
             }
             function _addValidationCss() {
                 // Show validation error
@@ -94,7 +92,7 @@ jQuery.fn.dataTable.Api.register('MakeCellsEditable()', function (settings) {
         }
     });
 
-    
+
 
     // On cell click
     $(table.body()).on('click', 'td', function () {
@@ -102,20 +100,26 @@ jQuery.fn.dataTable.Api.register('MakeCellsEditable()', function (settings) {
         var currentColumnIndex = table.cell(this).index().column;
 
         // DETERMINE WHAT COLUMNS CAN BE EDITED
-        if ((settings.columns && settings.columns.indexOf(currentColumnIndex) >-1) || (!settings.columns)) {
+        if ((settings.columns && settings.columns.indexOf(currentColumnIndex) > -1) || (!settings.columns)) {
             var row = table.row($(this).parents('tr'));
             editableCellsRow = row;
 
             var cell = table.cell(this).node();
+
+            // Show input
             if (!$(cell).find('input').length) {
-                // Change cell 
+                // Input CSS
+                var inputCss = "";
+                if (settings.inputCss) { inputCss = settings.inputCss; }
                 if (settings.confirmationButton) {
-                    var cssClass = settings.confirmationButton.class;
-                    $(cell).html("<input id='cell-being-edited'></input><a href='#' class='" + cssClass + "' onclick='$(this).updateEditableCell(this)'>Confirm</a> <a href='#' class='" + cssClass + "' onclick='$(this).cancelEditableCell(this)'>Cancel</a> ");
+                    // Buton CSS
+                    var confirmCss = settings.confirmationButton.confirmCss;
+                    var cancelCss = settings.confirmationButton.cancelCss;
+                    $(cell).html("<input class='" + inputCss + "'></input>&nbsp;<a href='#' class='" + confirmCss + "' onclick='$(this).updateEditableCell(this)'>Confirm</a> <a href='#' class='" + cancelCss + "' onclick='$(this).cancelEditableCell(this)'>Cancel</a> ");
                 } else {
-                    $(cell).html("<input id='cell-being-edited' onfocusout='$(this).updateEditableCell(this)'></input>");
+                    $(cell).html("<input class='" + inputCss + "' onfocusout='$(this).updateEditableCell(this)'></input>");
                 }
-                
+
             }
         }
     });
