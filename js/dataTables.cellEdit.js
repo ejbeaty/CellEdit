@@ -36,7 +36,6 @@ jQuery.fn.dataTable.Api.register('MakeCellsEditable()', function (settings) {
             switch ($(callingElement).prop('nodeName').toLowerCase()) {
                 case 'input':
                     inputField = $(callingElement);
-                    console.log(inputField)
                     break;
                 case 'a':
                     inputField = $(callingElement).siblings('input');
@@ -45,7 +44,6 @@ jQuery.fn.dataTable.Api.register('MakeCellsEditable()', function (settings) {
             // Update
             var newValue = inputField.val();
             if (!newValue && ((settings.allowNulls) && settings.allowNulls != true)) {
-                console.log(settings.allowNulls)
                 // If columns specified
                 if (settings.allowNulls.columns) {
                     // If current column allows nulls
