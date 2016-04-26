@@ -113,9 +113,11 @@ jQuery.fn.dataTable.Api.register('MakeCellsEditable()', function (settings) {
                     // Buton CSS
                     var confirmCss = settings.confirmationButton.confirmCss;
                     var cancelCss = settings.confirmationButton.cancelCss;
-                    $(cell).html("<input class='" + inputCss + "'></input>&nbsp;<a href='#' class='" + confirmCss + "' onclick='$(this).updateEditableCell(this)'>Confirm</a> <a href='#' class='" + cancelCss + "' onclick='$(this).cancelEditableCell(this)'>Cancel</a> ");
+                    $(cell).html("<input id='ejbeatycelledit' class='" + inputCss + "'></input>&nbsp;<a href='#' class='" + confirmCss + "' onclick='$(this).updateEditableCell(this)'>Confirm</a> <a href='#' class='" + cancelCss + "' onclick='$(this).cancelEditableCell(this)'>Cancel</a> ");
+                    $('#ejbeatycelledit').focus();
                 } else {
-                    $(cell).html("<input class='" + inputCss + "' onfocusout='$(this).updateEditableCell(this)'></input>");
+                    $(cell).html("<input id='ejbeatycelledit' class='" + inputCss + "' onfocusout='$(this).updateEditableCell(this)'></input>");
+                    $('#ejbeatycelledit').focus();
                 }
 
             }
