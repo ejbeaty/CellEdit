@@ -10,7 +10,7 @@ This plugin allows cells within a [DataTable](https://datatables.net/) to be edi
 ##### Settings { JSON Object  }
 Property | Type | Default | Example | Details  
 :------ | :------ | :------ | :-----| :------
-**onUpdate** | function |  | ```function(cell, row){ } ``` | The call back function to be executed. The updated **[cell](https://datatables.net/reference/api/cell())** and **[row](https://datatables.net/reference/api/row())** objects are passed as arguements. 
+**onUpdate** | function |  | ```function(cell, row, oldValue){ } ``` | The call back function to be executed. The updated **[cell](https://datatables.net/reference/api/cell())**, **[row](https://datatables.net/reference/api/row())**, and previous value in that cell are passed as arguements. 
 **inputCss** _(optional)_| string | none |```'my-css-class'```| A CSS class that will be applied to the input field
 **columns** _(optional)_| array | All columns |```[0,1,3,4]```| An array of column indexes defining the columns that you want to be editable.
 **allowNulls** _(optional)_| object | false | ```{ "columns": [4], "errorClass":"my-error"}``` | Determines which columns should allow null values to be entered and what CSS to apply if user input fails validation. If **errorClass** is null a default error class will be applied.
@@ -20,7 +20,7 @@ Property | Type | Default | Example | Details
 ```javascript
     var table = $('#myTable').DataTable();
 
-    myCallbackFunction = function (updatedCell, updatedRow) {
+    function myCallbackFunction (updatedCell, updatedRow, oldValue) {
         console.log("The new value for the cell is: " + updatedCell.data());
         console.log("The values for each cell in that row are: " + updatedRow.data());
     }
@@ -33,7 +33,7 @@ Property | Type | Default | Example | Details
 ```javascript
     var table = $('#myAdvancedTable').DataTable();
 
-    myCallbackFunction = function (updatedCell, updatedRow) {
+    function  myCallbackFunction(updatedCell, updatedRow, oldValue) {
         console.log("The new value for the cell is: " + updatedCell.data());
         console.log("The values for each cell in that row are: " + updatedRow.data());
     }

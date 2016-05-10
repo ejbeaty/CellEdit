@@ -69,10 +69,10 @@ jQuery.fn.dataTable.Api.register('MakeCellsEditable()', function (settings) {
                 }
             }
             function _update(newValue) {
-
+                var oldValue = cell.data();
                 cell.data(newValue);
                 //Return cell & row.
-                settings.onUpdate(cell, row);
+                settings.onUpdate(cell, row, oldValue);
             }
 
 
