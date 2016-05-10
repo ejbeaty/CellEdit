@@ -15,7 +15,7 @@ Property | Type | Default | Example | Details
 **columns** _(optional)_| array | All columns |```[0,1,3,4]```| An array of column indexes defining the columns that you want to be editable.
 **allowNulls** _(optional)_| object | false | ```{ "columns": [4], "errorClass":"my-error"}``` | Determines which columns should allow null values to be entered and what CSS to apply if user input fails validation. If **errorClass** is null a default error class will be applied.
 **confirmationButton** _(optional)_| bool &#124; object | false | ```{"confirmClass":"button"}``` | Will cause two links to appear after the input; _"Confirm"_ and _"Cancel"_. User input will not be accepted until _"Confirm"_ is clicked by the user. You can optionally pass in an object with **confirmCss** and **cancelCss** properties instead of boolean. These propertiesspecify the CSS classes that should be applied to the _Confirm_ and _Cancel_ anchor tags.
-
+**inputTypes** _(optional)_ | object array | text |  "inputTypes": [{"column":0, "type":"text", "options":null }] | Allows you to change the type of input that appears (IE dropdown or text). As different types of inputs are added I will update the advanced initialization example below with examples.
 ### Basic Initialization
 ```javascript
     var table = $('#myTable').DataTable();
@@ -29,7 +29,7 @@ Property | Type | Default | Example | Details
         "onUpdate": myCallbackFunction
     });
 ```
-### Advancted Initialization
+### Advanced Initialization
 ```javascript
     var table = $('#myAdvancedTable').DataTable();
 
@@ -49,6 +49,23 @@ Property | Type | Default | Example | Details
         "confirmationButton": { 
             "confirmCss": 'my-confirm-class',
             "cancelCss": 'my-cancel-class'
-        }
+        },
+		"inputTypes": [
+            {
+				"column":0, 
+				"type":"text", 
+				"options":null 
+			}, 
+            {
+                "column":1, 
+                "type": "list",
+                "options":[
+                    { "value": "1", "display": "Beaty" },
+                    { "value": "2", "display": "Doe" },
+                    { "value": "3", "display": "Dirt" }
+                ]
+            }
+            // Nothing specified for column 2 so it will default to text
+        ]
     });
 ```

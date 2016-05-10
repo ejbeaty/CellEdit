@@ -11,7 +11,19 @@
         "confirmationButton": { // could also be true
             "confirmCss": 'my-confirm-class',
             "cancelCss": 'my-cancel-class'
-        }
+        },
+        "inputTypes": [
+            {"column":0, "type":"text", "options":null },
+            {
+                "column":1, 
+                "type": "list",
+                "options":[
+                    { "value": "1", "display": "Beaty" },
+                    { "value": "2", "display": "Doe" },
+                    { "value": "3", "display": "Dirt" }
+                ]
+            }
+        ]
     });
 
 });

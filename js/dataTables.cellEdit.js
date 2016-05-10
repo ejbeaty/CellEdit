@@ -32,17 +32,9 @@ jQuery.fn.dataTable.Api.register('MakeCellsEditable()', function (settings) {
             var cell = table.cell($(callingElement).parent());
             var columnIndex = cell.index().column;
             var inputField;
-            // Update datatables cell value
-            switch ($(callingElement).prop('nodeName').toLowerCase()) {
-                case 'input':
-                    inputField = $(callingElement);
-                    break;
-                case 'a':
-                    inputField = $(callingElement).siblings('input');
-                    break;
-            }
+
             // Update
-            var newValue = inputField.val();
+            var newValue = getNewValue(callingElement);
             if (!newValue && ((settings.allowNulls) && settings.allowNulls != true)) {
                 // If columns specified
                 if (settings.allowNulls.columns) {
@@ -75,7 +67,6 @@ jQuery.fn.dataTable.Api.register('MakeCellsEditable()', function (settings) {
                 settings.onUpdate(cell, row, oldValue);
             }
 
-
             //Redraw table
             table.draw();
         },
@@ -105,22 +96,80 @@ jQuery.fn.dataTable.Api.register('MakeCellsEditable()', function (settings) {
             var cell = table.cell(this).node();
 
             // Show input
-            if (!$(cell).find('input').length) {
+            if (!$(cell).find('input').length && !$(cell).find('select').length) {
                 // Input CSS
-                var inputCss = "";
-                if (settings.inputCss) { inputCss = settings.inputCss; }
-                if (settings.confirmationButton) {
-                    // Buton CSS
-                    var confirmCss = settings.confirmationButton.confirmCss;
-                    var cancelCss = settings.confirmationButton.cancelCss;
-                    $(cell).html("<input id='ejbeatycelledit' class='" + inputCss + "'></input>&nbsp;<a href='#' class='" + confirmCss + "' onclick='$(this).updateEditableCell(this)'>Confirm</a> <a href='#' class='" + cancelCss + "' onclick='$(this).cancelEditableCell(this)'>Cancel</a> ");
-                    $('#ejbeatycelledit').focus();
-                } else {
-                    $(cell).html("<input id='ejbeatycelledit' class='" + inputCss + "' onfocusout='$(this).updateEditableCell(this)'></input>");
+                var input = getInputHtml(currentColumnIndex, settings);
+                $(cell).html(input.html);
+                if (input.focus) {
                     $('#ejbeatycelledit').focus();
                 }
-
             }
         }
     });
-})
+});
+
+function getInputHtml(currentColumnIndex, settings) {
+    var inputSetting, inputType, input, inputCss, confirmCss, cancelCss;
+
+    input = {"focus":true,"html":null}
+
+    $.each(settings.inputTypes, function (index, setting) {
+        if (setting.column == currentColumnIndex) {
+            inputSetting = setting;
+            inputType = inputSetting.type.toLowerCase();
+        }
+    });
+    
+    if (settings.inputCss) { inputCss = settings.inputCss; }
+    if (settings.confirmationButton) {
+        confirmCss = settings.confirmationButton.confirmCss;
+        cancelCss = settings.confirmationButton.cancelCss;
+        inputType = inputType + "-confirm";
+    }
+    switch (inputType) {
+        case "list":
+            input.html = "<select class='" + inputCss + "' onchange='$(this).updateEditableCell(this);'>";
+            $.each(inputSetting.options, function (index, option) {
+                input.html = input.html + "<option value='" + option.value + "' >" + option.display + "</option>"
+            });
+            input.html = input.html + "</select>";
+            input.focus = false;
+            break;
+        case "list-confirm": // List w/ confirm
+            input.html = "<select class='" + inputCss + "'>";
+            $.each(inputSetting.options, function (index, option) {
+                input.html = input.html + "<option value='" + option.value + "' >" + option.display + "</option>"
+            });
+            input.html = input.html + "</select>&nbsp;<a href='#' class='" + confirmCss + "' onclick='$(this).updateEditableCell(this);'>Confirm</a> <a href='#' class='" + cancelCss + "' onclick='$(this).cancelEditableCell(this)'>Cancel</a> ";
+            input.focus = false;
+            break;
+        case "text-confirm": // text input w/ confirm
+            input.html = "<input id='ejbeatycelledit' class='" + inputCss + "'></input>&nbsp;<a href='#' class='" + confirmCss + "' onclick='$(this).updateEditableCell(this)'>Confirm</a> <a href='#' class='" + cancelCss + "' onclick='$(this).cancelEditableCell(this)'>Cancel</a> ";
+            break;
+        case "undefined-confirm": // text input w/ confirm
+            input.html = "<input id='ejbeatycelledit' class='" + inputCss + "'></input>&nbsp;<a href='#' class='" + confirmCss + "' onclick='$(this).updateEditableCell(this)'>Confirm</a> <a href='#' class='" + cancelCss + "' onclick='$(this).cancelEditableCell(this)'>Cancel</a> ";
+            break;
+        default: // text input
+            input.html = "<input id='ejbeatycelledit' class='" + inputCss + "' onfocusout='$(this).updateEditableCell(this)'></input>";
+            break;
+    }
+    return input;
+}
+
+function getNewValue(callingElement) {
+    // Update datatables cell value
+
+    switch ($(callingElement).prop('nodeName').toLowerCase()) {
+        case 'a': // This means they're using confirmation buttons
+            if ($(callingElement).siblings('input').length > 0) {
+                inputField = $(callingElement).siblings('input');
+            }
+            if ($(callingElement).siblings('select').length > 0) {
+                inputField = $(callingElement).siblings('select');
+            }
+            break;
+        default:
+            inputField = $(callingElement);
+    }
+    return inputField.val();
+}
