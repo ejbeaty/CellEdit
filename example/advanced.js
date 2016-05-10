@@ -5,7 +5,7 @@
         "inputCss":'my-input-class',
         "columns": [0,1,2],
         "allowNulls": {
-            "columns": [1],
+            "columns": [3],
             "errorClass": 'error'
         },
         "confirmationButton": { // could also be true
@@ -13,7 +13,11 @@
             "cancelCss": 'my-cancel-class'
         },
         "inputTypes": [
-            {"column":0, "type":"text", "options":null },
+            {
+                "column": 0,
+                "type": "text",
+                "options": null
+            },
             {
                 "column":1, 
                 "type": "list",
@@ -23,6 +27,7 @@
                     { "value": "3", "display": "Dirt" }
                 ]
             }
+            // Nothing specified for column 2 so it will default to text
         ]
     });
 

@@ -31,10 +31,10 @@ jQuery.fn.dataTable.Api.register('MakeCellsEditable()', function (settings) {
             var row = table.row($(callingElement).parents('tr'));
             var cell = table.cell($(callingElement).parent());
             var columnIndex = cell.index().column;
-            var inputField;
+            var inputField =getInputField(callingElement);
 
             // Update
-            var newValue = getNewValue(callingElement);
+            var newValue = inputField.val();
             if (!newValue && ((settings.allowNulls) && settings.allowNulls != true)) {
                 // If columns specified
                 if (settings.allowNulls.columns) {
@@ -156,9 +156,9 @@ function getInputHtml(currentColumnIndex, settings) {
     return input;
 }
 
-function getNewValue(callingElement) {
+function getInputField(callingElement) {
     // Update datatables cell value
-
+    var inputField;
     switch ($(callingElement).prop('nodeName').toLowerCase()) {
         case 'a': // This means they're using confirmation buttons
             if ($(callingElement).siblings('input').length > 0) {
@@ -171,5 +171,5 @@ function getNewValue(callingElement) {
         default:
             inputField = $(callingElement);
     }
-    return inputField.val();
+    return inputField;
 }
