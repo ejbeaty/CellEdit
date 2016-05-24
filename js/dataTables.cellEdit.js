@@ -94,11 +94,11 @@ jQuery.fn.dataTable.Api.register('MakeCellsEditable()', function (settings) {
             editableCellsRow = row;
 
             var cell = table.cell(this).node();
-
+            var oldValue = table.cell(this).data();
             // Show input
             if (!$(cell).find('input').length && !$(cell).find('select').length) {
                 // Input CSS
-                var input = getInputHtml(currentColumnIndex, settings);
+                var input = getInputHtml(currentColumnIndex, settings,oldValue);
                 $(cell).html(input.html);
                 if (input.focus) {
                     $('#ejbeatycelledit').focus();
@@ -108,7 +108,7 @@ jQuery.fn.dataTable.Api.register('MakeCellsEditable()', function (settings) {
     });
 });
 
-function getInputHtml(currentColumnIndex, settings) {
+function getInputHtml(currentColumnIndex, settings, oldValue) {
     var inputSetting, inputType, input, inputCss, confirmCss, cancelCss;
 
     input = {"focus":true,"html":null}
@@ -144,13 +144,13 @@ function getInputHtml(currentColumnIndex, settings) {
             input.focus = false;
             break;
         case "text-confirm": // text input w/ confirm
-            input.html = "<input id='ejbeatycelledit' class='" + inputCss + "'></input>&nbsp;<a href='#' class='" + confirmCss + "' onclick='$(this).updateEditableCell(this)'>Confirm</a> <a href='#' class='" + cancelCss + "' onclick='$(this).cancelEditableCell(this)'>Cancel</a> ";
+            input.html = "<input id='ejbeatycelledit' class='" + inputCss + "' value='"+oldValue+"'></input>&nbsp;<a href='#' class='" + confirmCss + "' onclick='$(this).updateEditableCell(this)'>Confirm</a> <a href='#' class='" + cancelCss + "' onclick='$(this).cancelEditableCell(this)'>Cancel</a> ";
             break;
         case "undefined-confirm": // text input w/ confirm
-            input.html = "<input id='ejbeatycelledit' class='" + inputCss + "'></input>&nbsp;<a href='#' class='" + confirmCss + "' onclick='$(this).updateEditableCell(this)'>Confirm</a> <a href='#' class='" + cancelCss + "' onclick='$(this).cancelEditableCell(this)'>Cancel</a> ";
+            input.html = "<input id='ejbeatycelledit' class='" + inputCss + "' value='" + oldValue + "'></input>&nbsp;<a href='#' class='" + confirmCss + "' onclick='$(this).updateEditableCell(this)'>Confirm</a> <a href='#' class='" + cancelCss + "' onclick='$(this).cancelEditableCell(this)'>Cancel</a> ";
             break;
         default: // text input
-            input.html = "<input id='ejbeatycelledit' class='" + inputCss + "' onfocusout='$(this).updateEditableCell(this)'></input>";
+            input.html = "<input id='ejbeatycelledit' class='" + inputCss + "' onfocusout='$(this).updateEditableCell(this)' value='" + oldValue + "'></input>";
             break;
     }
     return input;
