@@ -95,6 +95,9 @@ jQuery.fn.dataTable.Api.register('MakeCellsEditable()', function (settings) {
 
             var cell = table.cell(this).node();
             var oldValue = table.cell(this).data();
+            // Sanitize value
+            oldValue = sanitizeCellValue(oldValue);
+
             // Show input
             if (!$(cell).find('input').length && !$(cell).find('select').length) {
                 // Input CSS
@@ -172,4 +175,13 @@ function getInputField(callingElement) {
             inputField = $(callingElement);
     }
     return inputField;
+}
+
+function sanitizeCellValue(cellValue) {
+    if (typeof (cellValue) === 'undefined' || cellValue.length < 1) {
+        return "";
+    }
+    // escape single quote
+    cellValue = cellValue.replace(/'/g, "&#39;");
+    return cellValue;
 }
