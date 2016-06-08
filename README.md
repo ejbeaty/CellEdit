@@ -17,12 +17,6 @@ Property | Type | Default | Example | Details
 **confirmationButton** _(optional)_| bool &#124; object | false | ```{"confirmClass":"button"}``` | Will cause two links to appear after the input; _"Confirm"_ and _"Cancel"_. User input will not be accepted until _"Confirm"_ is clicked by the user. You can optionally pass in an object with **confirmCss** and **cancelCss** properties instead of boolean. These propertiesspecify the CSS classes that should be applied to the _Confirm_ and _Cancel_ anchor tags.
 **inputTypes** _(optional)_ | object array | text |  "inputTypes": [{"column":0, "type":"text", "options":null }] | Allows you to change the type of input that appears (IE dropdown or text). As different types of inputs are added I will update the advanced initialization example below with examples.
 
-##### Settings string
-If you need to **[destroy](https://datatables.net/reference/api/destroy())** a table and then reinitialize it, you'll need to destroy the MakeCellsEditable configuration as well. You can do this by passing "destroy" to the method. An example of this can be found in the advanced example.
-```javascript
-	table.MakeCellsEditable("destroy");
-```
-
 ### Basic Initialization
 ```javascript
     var table = $('#myTable').DataTable();
@@ -75,4 +69,9 @@ If you need to **[destroy](https://datatables.net/reference/api/destroy())** a t
             // Nothing specified for column 2 so it will default to text
         ]
     });
+```
+##### Destroy
+If you need to **[destroy](https://datatables.net/reference/api/destroy())** a table and then reinitialize it, you'll need to destroy the MakeCellsEditable configuration as well. You can do this by passing "destroy" to the method. An example of this can be found in the advanced example.
+```javascript
+	table.MakeCellsEditable("destroy");
 ```
