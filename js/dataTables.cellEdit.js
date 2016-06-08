@@ -181,7 +181,11 @@ function sanitizeCellValue(cellValue) {
     if (typeof (cellValue) === 'undefined' || cellValue.length < 1) {
         return "";
     }
-    // escape single quote
-    cellValue = cellValue.replace(/'/g, "&#39;");
+
+    // If not a number
+    if (isNaN(cellValue)) {
+        // escape single quote
+        cellValue = cellValue.replace(/'/g, "&#39;");
+    }
     return cellValue;
 }
