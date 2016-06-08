@@ -1,11 +1,11 @@
-﻿/*! CellEdit 1.0.0
+﻿/*! CellEdit 1.0.19
  * ©2016 Elliott Beaty - datatables.net/license
  */
 
 /**
  * @summary     CellEdit
  * @description Make a cell editable when clicked upon
- * @version     1.0.0
+ * @version     1.0.19
  * @file        dataTables.editCell.js
  * @author      Elliott Beaty
  * @contact     elliott@elliottbeaty.com
@@ -25,7 +25,6 @@ jQuery.fn.dataTable.Api.register('MakeCellsEditable()', function (settings) {
     var table = this.table();
 
     jQuery.fn.extend({
-
         // UPDATE
         updateEditableCell: function (callingElement) {
             var row = table.row($(callingElement).parents('tr'));
@@ -81,34 +80,41 @@ jQuery.fn.dataTable.Api.register('MakeCellsEditable()', function (settings) {
         }
     });
 
+    // Destroy
+    if (settings === "destroy") {
+        $(table.body()).off("click", "td");
+        table = null;
+    }
 
+    if (table != null) {
+        // On cell click
+        $(table.body()).on('click', 'td', function () {
 
-    // On cell click
-    $(table.body()).on('click', 'td', function () {
+            var currentColumnIndex = table.cell(this).index().column;
 
-        var currentColumnIndex = table.cell(this).index().column;
+            // DETERMINE WHAT COLUMNS CAN BE EDITED
+            if ((settings.columns && settings.columns.indexOf(currentColumnIndex) > -1) || (!settings.columns)) {
+                var row = table.row($(this).parents('tr'));
+                editableCellsRow = row;
 
-        // DETERMINE WHAT COLUMNS CAN BE EDITED
-        if ((settings.columns && settings.columns.indexOf(currentColumnIndex) > -1) || (!settings.columns)) {
-            var row = table.row($(this).parents('tr'));
-            editableCellsRow = row;
+                var cell = table.cell(this).node();
+                var oldValue = table.cell(this).data();
+                // Sanitize value
+                oldValue = sanitizeCellValue(oldValue);
 
-            var cell = table.cell(this).node();
-            var oldValue = table.cell(this).data();
-            // Sanitize value
-            oldValue = sanitizeCellValue(oldValue);
-
-            // Show input
-            if (!$(cell).find('input').length && !$(cell).find('select').length) {
-                // Input CSS
-                var input = getInputHtml(currentColumnIndex, settings,oldValue);
-                $(cell).html(input.html);
-                if (input.focus) {
-                    $('#ejbeatycelledit').focus();
+                // Show input
+                if (!$(cell).find('input').length && !$(cell).find('select').length) {
+                    // Input CSS
+                    var input = getInputHtml(currentColumnIndex, settings, oldValue);
+                    $(cell).html(input.html);
+                    if (input.focus) {
+                        $('#ejbeatycelledit').focus();
+                    }
                 }
             }
-        }
-    });
+        });
+    }
+    
 });
 
 function getInputHtml(currentColumnIndex, settings, oldValue) {
