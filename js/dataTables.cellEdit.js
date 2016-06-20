@@ -184,7 +184,7 @@ function getInputField(callingElement) {
 }
 
 function sanitizeCellValue(cellValue) {
-    if (typeof (cellValue) === 'undefined' || cellValue.length < 1) {
+    if (typeof (cellValue) === 'undefined' || cellValue === null || cellValue.length < 1) {
         return "";
     }
 
