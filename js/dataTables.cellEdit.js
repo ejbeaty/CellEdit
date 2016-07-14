@@ -122,12 +122,14 @@ function getInputHtml(currentColumnIndex, settings, oldValue) {
 
     input = {"focus":true,"html":null}
 
-    $.each(settings.inputTypes, function (index, setting) {
-        if (setting.column == currentColumnIndex) {
-            inputSetting = setting;
-            inputType = inputSetting.type.toLowerCase();
-        }
-    });
+    if(settings.inputTypes){
+		$.each(settings.inputTypes, function (index, setting) {
+			if (setting.column == currentColumnIndex) {
+				inputSetting = setting;
+				inputType = inputSetting.type.toLowerCase();
+			}
+		});
+	}
     
     if (settings.inputCss) { inputCss = settings.inputCss; }
     if (settings.confirmationButton) {
