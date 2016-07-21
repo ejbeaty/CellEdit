@@ -65,9 +65,11 @@ jQuery.fn.dataTable.Api.register('MakeCellsEditable()', function (settings) {
                 //Return cell & row.
                 settings.onUpdate(cell, row, oldValue);
             }
-
+            // Get current page
+            var currentPageIndex = table.page.info().page;
+            
             //Redraw table
-            table.draw();
+            table.page(currentPageIndex).draw(false);
         },
         // CANCEL
         cancelEditableCell: function (callingElement) {
