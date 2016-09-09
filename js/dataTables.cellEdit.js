@@ -156,6 +156,14 @@ function getInputHtml(currentColumnIndex, settings, oldValue) {
             input.html = input.html + "</select>&nbsp;<a href='#' class='" + confirmCss + "' onclick='$(this).updateEditableCell(this);'>Confirm</a> <a href='#' class='" + cancelCss + "' onclick='$(this).cancelEditableCell(this)'>Cancel</a> ";
             input.focus = false;
             break;
+        case "datepicker": //Both datepicker options work best when confirming the values
+        case "datepicker-confirm": 
+	    jQuery(".datepick").datepicker("destroy");
+	    input.html = "<input id='ejbeatycelledit' type='text' name='date' class='datepick " + inputCss + "'   value='" + oldValue + "'></input> &nbsp;<a href='#' class='" + confirmCss + "' onclick='$(this).updateEditableCell(this)'>Confirm</a> <a href='#' class='" + cancelCss + "' onclick='$(this).cancelEditableCell(this)'>Cancel</a>";
+	    setTimeout( function(){ //Set timeout to allow the script to write the input.html before triggering the datepicker 
+	     	jQuery('.datepick').datepicker({showOn: "button",buttonImage: "/images/calendar.gif",buttonImageOnly: true,buttonText: "Select date"});  
+	    },100);
+	    break;
         case "text-confirm": // text input w/ confirm
             input.html = "<input id='ejbeatycelledit' class='" + inputCss + "' value='"+oldValue+"'></input>&nbsp;<a href='#' class='" + confirmCss + "' onclick='$(this).updateEditableCell(this)'>Confirm</a> <a href='#' class='" + cancelCss + "' onclick='$(this).cancelEditableCell(this)'>Cancel</a> ";
             break;
