@@ -4,7 +4,7 @@ $(document).ready(function () {
     table.MakeCellsEditable({
         "onUpdate": myCallbackFunction,
         "inputCss":'my-input-class',
-        "columns": [0,1,2],
+        "columns": [0,1,2,3],
         "allowNulls": {
             "columns": [3],
             "errorClass": 'error'
@@ -27,8 +27,16 @@ $(document).ready(function () {
                     { "value": "2", "display": "Doe" },
                     { "value": "3", "display": "Dirt" }
                 ]
+            },
+            {
+                "column": 2,
+                "type": "datepicker", // requires jQuery UI: http://http://jqueryui.com/download/
+                "options": {
+                    "icon": "http://jqueryui.com/resources/demos/datepicker/images/calendar.gif" // Optional
+                }
             }
-            // Nothing specified for column 2 so it will default to text
+             // Nothing specified for column 3 so it will default to text
+            
         ]
     });
 

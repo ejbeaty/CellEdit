@@ -67,6 +67,13 @@ Property | Type | Default | Example | Details
                 ]
             }
             // Nothing specified for column 2 so it will default to text
+			,{
+                "column": 2,
+                "type": "datepicker", // requires jQuery UI: http://http://jqueryui.com/download/
+                "options": {
+                    "icon": "http://jqueryui.com/resources/demos/datepicker/images/calendar.gif" // Optional
+                }
+            }
         ]
     });
 ```

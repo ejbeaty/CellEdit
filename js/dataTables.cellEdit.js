@@ -157,13 +157,30 @@ function getInputHtml(currentColumnIndex, settings, oldValue) {
             input.focus = false;
             break;
         case "datepicker": //Both datepicker options work best when confirming the values
-        case "datepicker-confirm": 
-	    jQuery(".datepick").datepicker("destroy");
-	    input.html = "<input id='ejbeatycelledit' type='text' name='date' class='datepick " + inputCss + "'   value='" + oldValue + "'></input> &nbsp;<a href='#' class='" + confirmCss + "' onclick='$(this).updateEditableCell(this)'>Confirm</a> <a href='#' class='" + cancelCss + "' onclick='$(this).cancelEditableCell(this)'>Cancel</a>";
-	    setTimeout( function(){ //Set timeout to allow the script to write the input.html before triggering the datepicker 
-	     	jQuery('.datepick').datepicker({showOn: "button",buttonImage: "/images/calendar.gif",buttonImageOnly: true,buttonText: "Select date"});  
-	    },100);
-	    break;
+        case "datepicker-confirm":
+            // Makesure jQuery UI is loaded on the page
+            if (typeof jQuery.ui == 'undefined') {
+                alert("jQuery UI is required for the DatePicker control but it is not loaded on the page!");
+                break;
+            }
+	        jQuery(".datepick").datepicker("destroy");
+	        input.html = "<input id='ejbeatycelledit' type='text' name='date' class='datepick " + inputCss + "'   value='" + oldValue + "'></input> &nbsp;<a href='#' class='" + confirmCss + "' onclick='$(this).updateEditableCell(this)'>Confirm</a> <a href='#' class='" + cancelCss + "' onclick='$(this).cancelEditableCell(this)'>Cancel</a>";
+	        setTimeout(function () { //Set timeout to allow the script to write the input.html before triggering the datepicker 
+	            var icon = "http://jqueryui.com/resources/demos/datepicker/images/calendar.gif";
+                // Allow the user to provide icon 
+	            if (typeof inputSetting.options !== 'undefined' && typeof inputSetting.options.icon !== 'undefined') {
+	                icon = inputSetting.options.icon;
+	            }
+	            var self = jQuery('.datepick').datepicker(
+                    {
+                        showOn: "button",
+                        buttonImage: icon,
+                        buttonImageOnly: true,
+                        buttonText: "Select date"
+                    });
+
+	        },100);
+	        break;
         case "text-confirm": // text input w/ confirm
             input.html = "<input id='ejbeatycelledit' class='" + inputCss + "' value='"+oldValue+"'></input>&nbsp;<a href='#' class='" + confirmCss + "' onclick='$(this).updateEditableCell(this)'>Confirm</a> <a href='#' class='" + cancelCss + "' onclick='$(this).cancelEditableCell(this)'>Cancel</a> ";
             break;
