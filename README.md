@@ -66,7 +66,6 @@ Property | Type | Default | Example | Details
                     { "value": "3", "display": "Dirt" }
                 ]
             }
-            // Nothing specified for column 2 so it will default to text
 			,{
                 "column": 2,
                 "type": "datepicker", // requires jQuery UI: http://http://jqueryui.com/download/
