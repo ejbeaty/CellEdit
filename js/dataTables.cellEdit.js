@@ -79,10 +79,6 @@ jQuery.fn.dataTable.Api.register('MakeCellsEditable()', function (settings) {
             var cell = table.cell($(callingElement).parent());
             // Set cell to it's original value
             cell.data(cell.data());
-
-            // Get current page and redraw the datatable
-            var currentPageIndex = table.page.info().page;
-            table.page(currentPageIndex).draw(false);
         }
     });
 
@@ -99,6 +95,12 @@ jQuery.fn.dataTable.Api.register('MakeCellsEditable()', function (settings) {
 
             // Determine which columns can be edited
             if ((settings.columns && settings.columns.indexOf(currentColumnIndex) > -1) || (!settings.columns)) {
+                // Check if another edit is in progress
+                var editElement = $('#ejbeatycelledit');
+                if (editElement.length) {
+                    $(editElement).cancelEditableCell(editElement);
+                }
+
                 var cell = table.cell(this).node();
                 var oldValue = sanitizeCellValue(table.cell(this).data());
 
@@ -212,7 +214,7 @@ function getInputHtml(currentColumnIndex, settings, oldValue) {
         default:
             // Text input
             input.html = "<input id='ejbeatycelledit' class='" + inputCss +
-                "' onfocusout='$(this).updateEditableCell(this)' value='" + oldValue + "' />";
+                "' onblur='$(this).updateEditableCell(this)' value='" + oldValue + "' />";
             break;
     }
     return input;
