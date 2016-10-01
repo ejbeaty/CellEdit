@@ -140,7 +140,7 @@ function getInputHtml(currentColumnIndex, settings, oldValue) {
         }
         confirmCss = settings.confirmationButton.confirmCss;
         if (settings.confirmationButton.hasOwnProperty('cancelButton')) {
-            confirmButton = settings.confirmationButton.cancelButton;
+            cancelButton = settings.confirmationButton.cancelButton;
         }
         cancelCss = settings.confirmationButton.cancelCss;
         inputType = inputType + '-confirm';
