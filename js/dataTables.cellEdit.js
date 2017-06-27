@@ -104,16 +104,19 @@ jQuery.fn.dataTable.Api.register('MakeCellsEditable()', function (settings) {
 
                 var cell = table.cell(this).node();
                 var oldValue = table.cell(this).data();
-                // Sanitize value
-                oldValue = sanitizeCellValue(oldValue);
+		//make computed field not editable
+                if(!isComputedValue(oldValue)){
+                    // Sanitize value
+                    oldValue = sanitizeCellValue(oldValue);
 
-                // Show input
-                if (!$(cell).find('input').length && !$(cell).find('select').length) {
-                    // Input CSS
-                    var input = getInputHtml(currentColumnIndex, settings, oldValue);
-                    $(cell).html(input.html);
-                    if (input.focus) {
-                        $('#ejbeatycelledit').focus();
+                    // Show input
+                    if (!$(cell).find('input').length && !$(cell).find('select').length) {
+                        // Input CSS
+                        var input = getInputHtml(currentColumnIndex, settings, oldValue);
+                        $(cell).html(input.html);
+                        if (input.focus) {
+                            $('#ejbeatycelledit').focus();
+                        }
                     }
                 }
             }
@@ -129,7 +132,7 @@ function getInputHtml(currentColumnIndex, settings, oldValue) {
 
     if(settings.inputTypes){
 		$.each(settings.inputTypes, function (index, setting) {
-			if (setting.column == currentColumnIndex) {
+			if (setting.column === currentColumnIndex) {
 				inputSetting = setting;
 				inputType = inputSetting.type.toLowerCase();
 			}
@@ -162,7 +165,7 @@ function getInputHtml(currentColumnIndex, settings, oldValue) {
         case "datepicker": //Both datepicker options work best when confirming the values
         case "datepicker-confirm":
             // Makesure jQuery UI is loaded on the page
-            if (typeof jQuery.ui == 'undefined') {
+            if (typeof jQuery.ui === 'undefined') {
                 alert("jQuery UI is required for the DatePicker control but it is not loaded on the page!");
                 break;
             }
@@ -226,4 +229,9 @@ function sanitizeCellValue(cellValue) {
         cellValue = cellValue.replace(/'/g, "&#39;");
     }
     return cellValue;
+}
+
+function isComputedValue(cellValue) {
+    if (cellValue === null) { return false;}
+    return ( (typeof cellValue === 'function') || (typeof cellValue === 'object') );
 }
