@@ -108,7 +108,7 @@ jQuery.fn.dataTable.Api.register('MakeCellsEditable()', function (settings) {
                 oldValue = sanitizeCellValue(oldValue);
 
                 // Show input
-                if (!$(cell).find('input').length && !$(cell).find('select').length) {
+                if (!$(cell).find('input').length && !$(cell).find('select').length && !$(cell).find('textarea').length) {
                     // Input CSS
                     var input = getInputHtml(currentColumnIndex, settings, oldValue);
                     $(cell).html(input.html);
@@ -190,6 +190,10 @@ function getInputHtml(currentColumnIndex, settings, oldValue) {
         case "undefined-confirm": // text input w/ confirm
             input.html = "<input id='ejbeatycelledit' class='" + inputCss + "' value='" + oldValue + "'></input>&nbsp;<a href='#' class='" + confirmCss + "' onclick='$(this).updateEditableCell(this)'>Confirm</a> <a href='#' class='" + cancelCss + "' onclick='$(this).cancelEditableCell(this)'>Cancel</a> ";
             break;
+        case "textarea": 
+        case "textarea-confirm":
+            input.html = "<textarea id='ejbeatycelledit' class='" + inputCss + "'>"+oldValue+"</textarea><a href='#' class='" + confirmCss + "' onclick='$(this).updateEditableCell(this)'>Confirm</a> <a href='#' class='" + cancelCss + "' onclick='$(this).cancelEditableCell(this)'>Cancel</a>";
+            break;            
         default: // text input
             input.html = "<input id='ejbeatycelledit' class='" + inputCss + "' onfocusout='$(this).updateEditableCell(this)' value='" + oldValue + "'></input>";
             break;
@@ -208,7 +212,10 @@ function getInputField(callingElement) {
             if ($(callingElement).siblings('select').length > 0) {
                 inputField = $(callingElement).siblings('select');
             }
-            break;
+            if ($(callingElement).siblings('textarea').length > 0) {
+                inputField = $(callingElement).siblings('textarea');
+            }
+        break;
         default:
             inputField = $(callingElement);
     }
