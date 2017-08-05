@@ -33,6 +33,7 @@ jQuery.fn.dataTable.Api.register('MakeCellsEditable()', function (settings) {
             var cell = table.cell($(callingElement).parent());
             var columnIndex = cell.index().column;
             var inputField =getInputField(callingElement);
+            var returnValue;
 
             // Update
             var newValue = inputField.val();
@@ -41,7 +42,7 @@ jQuery.fn.dataTable.Api.register('MakeCellsEditable()', function (settings) {
                 if (settings.allowNulls.columns) {
                     // If current column allows nulls
                     if (settings.allowNulls.columns.indexOf(columnIndex) > -1) {
-                        _update(newValue);
+                        returnValue = _update(newValue);
                     } else {
                         _addValidationCss();
                     }
@@ -51,7 +52,7 @@ jQuery.fn.dataTable.Api.register('MakeCellsEditable()', function (settings) {
                 }
                 //All columns allow null
             } else {
-                _update(newValue);
+                returnValue = _update(newValue);
             }
             function _addValidationCss() {
                 // Show validation error
@@ -65,13 +66,24 @@ jQuery.fn.dataTable.Api.register('MakeCellsEditable()', function (settings) {
                 var oldValue = cell.data();
                 cell.data(newValue);
                 //Return cell & row.
-                settings.onUpdate(cell, row, oldValue);
+                return settings.onUpdate(cell, row, oldValue);
             }
-            // Get current page
-            var currentPageIndex = table.page.info().page;
-            
-            //Redraw table
-            table.page(currentPageIndex).draw(false);
+            var _lastActions = function(){
+                // Get current page
+                var currentPageIndex = table.page.info().page;
+
+                //Redraw table
+                table.page(currentPageIndex).draw(false);
+            }
+
+            // If returnValue has then method, assume it's a promise
+            if( "object" === typeof returnValue && "function" === typeof returnValue.then ){
+                returnValue.then(function(){
+                    _lastActions();
+                });
+            }
+            else _lastActions();
+
         },
         // CANCEL
         cancelEditableCell: function (callingElement) {
