@@ -28,7 +28,7 @@ jQuery.fn.dataTable.Api.register('MakeCellsEditable()', function (settings) {
         // UPDATE
         updateEditableCell: function (callingElement) {
             // Need to redeclare table here for situations where we have more than one datatable on the page. See issue6 on github
-            var table = $(callingElement.closest("table")).DataTable().table();
+            var table = $(callingElement).closest("table").DataTable().table();
             var row = table.row($(callingElement).parents('tr'));
             var cell = table.cell($(callingElement).parent());
             var columnIndex = cell.index().column;
