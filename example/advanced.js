@@ -20,7 +20,7 @@ $(document).ready(function () {
                 "options": null
             },
             {
-                "column":1, 
+                "column":1,
                 "type": "list",
                 "options":[
                     { "value": "1", "display": "Beaty" },
@@ -34,9 +34,13 @@ $(document).ready(function () {
                 "options": {
                     "icon": "http://jqueryui.com/resources/demos/datepicker/images/calendar.gif" // Optional
                 }
-            }
-             // Nothing specified for column 3 so it will default to text
-            
+            },
+            {
+                    "column":3,
+                    "type":"password",
+                    "options":null
+            },
+
         ]
     });
 
