@@ -1,4 +1,4 @@
-﻿/*! CellEdit 1.0.19
+/*! CellEdit 1.0.19
  * ©2016 Elliott Beaty - datatables.net/license
  */
 
@@ -36,12 +36,14 @@ jQuery.fn.dataTable.Api.register('MakeCellsEditable()', function (settings) {
 
             // Update
             var newValue = inputField.val();
+            var type = inputField.attr('type');
+
             if (!newValue && ((settings.allowNulls) && settings.allowNulls != true)) {
                 // If columns specified
                 if (settings.allowNulls.columns) {
                     // If current column allows nulls
                     if (settings.allowNulls.columns.indexOf(columnIndex) > -1) {
-                        _update(newValue);
+                        _update(newValue, type);
                     } else {
                         _addValidationCss();
                     }
@@ -51,7 +53,7 @@ jQuery.fn.dataTable.Api.register('MakeCellsEditable()', function (settings) {
                 }
                 //All columns allow null
             } else {
-                _update(newValue);
+                _update(newValue, type);
             }
             function _addValidationCss() {
                 // Show validation error
@@ -61,11 +63,15 @@ jQuery.fn.dataTable.Api.register('MakeCellsEditable()', function (settings) {
                     $(inputField).css({ "border": "red solid 1px" });
                 }
             }
-            function _update(newValue) {
+            function _update(newValue, type) {
                 var oldValue = cell.data();
                 cell.data(newValue);
                 //Return cell & row.
                 settings.onUpdate(cell, row, oldValue);
+
+                if (type == "password") {
+                    cell.data("******");
+                }
             }
             // Get current page
             var currentPageIndex = table.page.info().page;
@@ -193,6 +199,12 @@ function getInputHtml(currentColumnIndex, settings, oldValue) {
 	        break;
         case "text-confirm": // text input w/ confirm
             input.html = "<input id='ejbeatycelledit' class='" + inputCss + "' value='"+oldValue+"'></input>&nbsp;<a href='javascript:void(0);' class='" + confirmCss + "' onclick='$(this).updateEditableCell(this)'>Confirm</a> <a href='javascript:void(0);' class='" + cancelCss + "' onclick='$(this).cancelEditableCell(this)'>Cancel</a> ";
+            break;
+        case "password-confirm": // password input w/ confirm
+            input.html = "<input type='password' id='ejbeatycelledit' class='" + inputCss + "' value='"+oldValue+"'></input>&nbsp;<a href='javascript:void(0);' class='" + confirmCss + "' onclick='$(this).updateEditableCell(this)'>Confirm</a> <a href='javascript:void(0);' class='" + cancelCss + "' onclick='$(this).cancelEditableCell(this)'>Cancel</a> ";
+            break;
+        case "password": // password input
+            input.html = "<input type='password' id='ejbeatycelledit' class='" + inputCss + "' onfocusout='$(this).updateEditableCell(this)' value='"+oldValue+"'></input>";
             break;
         case "undefined-confirm": // text input w/ confirm
             input.html = "<input id='ejbeatycelledit' class='" + inputCss + "' value='" + oldValue + "'></input>&nbsp;<a href='javascript:void(0);' class='" + confirmCss + "' onclick='$(this).updateEditableCell(this)'>Confirm</a> <a href='javascript:void(0);' class='" + cancelCss + "' onclick='$(this).cancelEditableCell(this)'>Cancel</a> ";
