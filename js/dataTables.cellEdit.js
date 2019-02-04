@@ -30,7 +30,7 @@ jQuery.fn.dataTable.Api.register('MakeCellsEditable()', function (settings) {
             // Need to redeclare table here for situations where we have more than one datatable on the page. See issue6 on github
             var table = $(callingElement).closest("table").DataTable().table();
             var row = table.row($(callingElement).parents('tr'));
-            var cell = table.cell($(callingElement).parent());
+            var cell = table.cell($(callingElement).parents('td, th'));
             var columnIndex = cell.index().column;
             var inputField =getInputField(callingElement);
 
@@ -76,7 +76,7 @@ jQuery.fn.dataTable.Api.register('MakeCellsEditable()', function (settings) {
         // CANCEL
         cancelEditableCell: function (callingElement) {
             var table = $(callingElement.closest("table")).DataTable().table();
-            var cell = table.cell($(callingElement).parent());
+            var cell = table.cell($(callingElement).parents('td, th'));
             // Set cell to it's original value
             cell.data(cell.data());
 
@@ -123,7 +123,7 @@ jQuery.fn.dataTable.Api.register('MakeCellsEditable()', function (settings) {
 });
 
 function getInputHtml(currentColumnIndex, settings, oldValue) {
-    var inputSetting, inputType, input, inputCss, confirmCss, cancelCss, startWrapperHtml, endWrapperHtml;
+    var inputSetting, inputType, input, inputCss, confirmCss, cancelCss, startWrapperHtml = '', endWrapperHtml = '';
 
     input = {"focus":true,"html":null};
 
