@@ -123,9 +123,9 @@ jQuery.fn.dataTable.Api.register('MakeCellsEditable()', function (settings) {
 });
 
 function getInputHtml(currentColumnIndex, settings, oldValue) {
-    var inputSetting, inputType, input, inputCss, confirmCss, cancelCss;
+    var inputSetting, inputType, input, inputCss, confirmCss, cancelCss, startWrapperHtml, endWrapperHtml;
 
-    input = {"focus":true,"html":null}
+    input = {"focus":true,"html":null};
 
     if(settings.inputTypes){
 		$.each(settings.inputTypes, function (index, setting) {
@@ -137,6 +137,13 @@ function getInputHtml(currentColumnIndex, settings, oldValue) {
 	}
 
     if (settings.inputCss) { inputCss = settings.inputCss; }
+    if (settings.wrapperHtml) {
+        var elements = settings.wrapperHtml.split('{content}');
+        if (elements.length === 2) {
+            startWrapperHtml = elements[0];
+            endWrapperHtml = elements[1];
+        }
+    }
     if (settings.confirmationButton) {
         confirmCss = settings.confirmationButton.confirmCss;
         cancelCss = settings.confirmationButton.cancelCss;
@@ -144,7 +151,7 @@ function getInputHtml(currentColumnIndex, settings, oldValue) {
     }
     switch (inputType) {
         case "list":
-            input.html = "<select class='" + inputCss + "' onchange='$(this).updateEditableCell(this);'>";
+            input.html = startWrapperHtml + "<select class='" + inputCss + "' onchange='$(this).updateEditableCell(this);'>";
             $.each(inputSetting.options, function (index, option) {
                 if (oldValue == option.value) {
                    input.html = input.html + "<option value='" + option.value + "' selected>" + option.display + "</option>"
@@ -152,11 +159,11 @@ function getInputHtml(currentColumnIndex, settings, oldValue) {
                    input.html = input.html + "<option value='" + option.value + "' >" + option.display + "</option>"
                 }
             });
-            input.html = input.html + "</select>";
+            input.html = input.html + "</select>" + endWrapperHtml;
             input.focus = false;
             break;
         case "list-confirm": // List w/ confirm
-            input.html = "<select class='" + inputCss + "'>";
+            input.html = startWrapperHtml + "<select class='" + inputCss + "'>";
             $.each(inputSetting.options, function (index, option) {
                 if (oldValue == option.value) {
                    input.html = input.html + "<option value='" + option.value + "' selected>" + option.display + "</option>"
@@ -164,7 +171,7 @@ function getInputHtml(currentColumnIndex, settings, oldValue) {
                    input.html = input.html + "<option value='" + option.value + "' >" + option.display + "</option>"
                 }
             });
-            input.html = input.html + "</select>&nbsp;<a href='javascript:void(0);' class='" + confirmCss + "' onclick='$(this).updateEditableCell(this);'>Confirm</a> <a href='javascript:void(0);' class='" + cancelCss + "' onclick='$(this).cancelEditableCell(this)'>Cancel</a> ";
+            input.html = input.html + "</select>&nbsp;<a href='javascript:void(0);' class='" + confirmCss + "' onclick='$(this).updateEditableCell(this);'>Confirm</a> <a href='javascript:void(0);' class='" + cancelCss + "' onclick='$(this).cancelEditableCell(this)'>Cancel</a>" + endWrapperHtml;
             input.focus = false;
             break;
         case "datepicker": //Both datepicker options work best when confirming the values
@@ -175,7 +182,7 @@ function getInputHtml(currentColumnIndex, settings, oldValue) {
                 break;
             }
 	        jQuery(".datepick").datepicker("destroy");
-	        input.html = "<input id='ejbeatycelledit' type='text' name='date' class='datepick " + inputCss + "'   value='" + oldValue + "'></input> &nbsp;<a href='javascript:void(0);' class='" + confirmCss + "' onclick='$(this).updateEditableCell(this)'>Confirm</a> <a href='javascript:void(0);' class='" + cancelCss + "' onclick='$(this).cancelEditableCell(this)'>Cancel</a>";
+	        input.html = startWrapperHtml + "<input id='ejbeatycelledit' type='text' name='date' class='datepick " + inputCss + "'   value='" + oldValue + "'></input> &nbsp;<a href='javascript:void(0);' class='" + confirmCss + "' onclick='$(this).updateEditableCell(this)'>Confirm</a> <a href='javascript:void(0);' class='" + cancelCss + "' onclick='$(this).cancelEditableCell(this)'>Cancel</a>" + endWrapperHtml;
 	        setTimeout(function () { //Set timeout to allow the script to write the input.html before triggering the datepicker
 	            var icon = "http://jqueryui.com/resources/demos/datepicker/images/calendar.gif";
                 // Allow the user to provide icon
@@ -192,17 +199,17 @@ function getInputHtml(currentColumnIndex, settings, oldValue) {
 	        },100);
 	        break;
         case "text-confirm": // text input w/ confirm
-            input.html = "<input id='ejbeatycelledit' class='" + inputCss + "' value='"+oldValue+"'></input>&nbsp;<a href='javascript:void(0);' class='" + confirmCss + "' onclick='$(this).updateEditableCell(this)'>Confirm</a> <a href='javascript:void(0);' class='" + cancelCss + "' onclick='$(this).cancelEditableCell(this)'>Cancel</a> ";
+            input.html = startWrapperHtml + "<input id='ejbeatycelledit' class='" + inputCss + "' value='"+oldValue+"'></input>&nbsp;<a href='javascript:void(0);' class='" + confirmCss + "' onclick='$(this).updateEditableCell(this)'>Confirm</a> <a href='javascript:void(0);' class='" + cancelCss + "' onclick='$(this).cancelEditableCell(this)'>Cancel</a>" + endWrapperHtml;
             break;
         case "undefined-confirm": // text input w/ confirm
-            input.html = "<input id='ejbeatycelledit' class='" + inputCss + "' value='" + oldValue + "'></input>&nbsp;<a href='javascript:void(0);' class='" + confirmCss + "' onclick='$(this).updateEditableCell(this)'>Confirm</a> <a href='javascript:void(0);' class='" + cancelCss + "' onclick='$(this).cancelEditableCell(this)'>Cancel</a> ";
+            input.html = startWrapperHtml + "<input id='ejbeatycelledit' class='" + inputCss + "' value='" + oldValue + "'></input>&nbsp;<a href='javascript:void(0);' class='" + confirmCss + "' onclick='$(this).updateEditableCell(this)'>Confirm</a> <a href='javascript:void(0);' class='" + cancelCss + "' onclick='$(this).cancelEditableCell(this)'>Cancel</a>" + endWrapperHtml;
             break;
         case "textarea":
         case "textarea-confirm":
-            input.html = "<textarea id='ejbeatycelledit' class='" + inputCss + "'>"+oldValue+"</textarea><a href='javascript:void(0);' class='" + confirmCss + "' onclick='$(this).updateEditableCell(this)'>Confirm</a> <a href='javascript:void(0);' class='" + cancelCss + "' onclick='$(this).cancelEditableCell(this)'>Cancel</a>";
+            input.html = startWrapperHtml + "<textarea id='ejbeatycelledit' class='" + inputCss + "'>"+oldValue+"</textarea><a href='javascript:void(0);' class='" + confirmCss + "' onclick='$(this).updateEditableCell(this)'>Confirm</a> <a href='javascript:void(0);' class='" + cancelCss + "' onclick='$(this).cancelEditableCell(this)'>Cancel</a>" + endWrapperHtml;
             break;
         default: // text input
-            input.html = "<input id='ejbeatycelledit' class='" + inputCss + "' onfocusout='$(this).updateEditableCell(this)' value='" + oldValue + "'></input>";
+            input.html = startWrapperHtml + "<input id='ejbeatycelledit' class='" + inputCss + "' onfocusout='$(this).updateEditableCell(this)' value='" + oldValue + "'></input>" + endWrapperHtml;
             break;
     }
     return input;

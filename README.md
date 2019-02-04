@@ -12,6 +12,7 @@ Property | Type | Default | Example | Details
 :------ | :------ | :------ | :-----| :------
 **onUpdate** | function |  | ```function(cell, row, oldValue){ } ``` | The call back function to be executed. The updated **[cell](https://datatables.net/reference/api/cell())**, **[row](https://datatables.net/reference/api/row())**, and previous value in that cell are passed as arguments. 
 **inputCss** _(optional)_| string | none |```'my-css-class'```| A CSS class that will be applied to the input field
+**wrapperHtml** _(optional)_| string | none |```<div class="row">{content}</div>```| HTML used to wrap the inline editor. Use `{content}` as the placeholder for the inline editor.
 **columns** _(optional)_| array | All columns |```[0,1,3,4]```| An array of column indexes defining the columns that you want to be editable.
 **allowNulls** _(optional)_| object | false | ```{ "columns": [4], "errorClass":"my-error"}``` | Determines which columns should allow null values to be entered and what CSS to apply if user input fails validation. If **errorClass** is null a default error class will be applied.
 **confirmationButton** _(optional)_| bool &#124; object | false | ```{"confirmClass":"button"}``` | Will cause two links to appear after the input; _"Confirm"_ and _"Cancel"_. User input will not be accepted until _"Confirm"_ is clicked by the user. You can optionally pass in an object with **confirmCss** and **cancelCss** properties instead of boolean. These propertiesspecify the CSS classes that should be applied to the _Confirm_ and _Cancel_ anchor tags.
