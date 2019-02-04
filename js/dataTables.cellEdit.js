@@ -50,13 +50,20 @@ jQuery.fn.dataTable.Api.register('MakeCellsEditable()', function (settings) {
                     _addValidationCss();
                 }
                 //All columns allow null
-            } else {
+            } else if (newValue && settings.onValidate) {
+                if (settings.onValidate(cell, row, newValue)) {
+                    _update(newValue);
+                } else {
+                    _addValidationCss();
+                }
+            }
+            else {
                 _update(newValue);
             }
             function _addValidationCss() {
                 // Show validation error
                 if (settings.allowNulls.errorClass) {
-                    $(inputField).addClass(settings.allowNulls.errorClass)
+                    $(inputField).addClass(settings.allowNulls.errorClass);
                 } else {
                     $(inputField).css({ "border": "red solid 1px" });
                 }

@@ -11,6 +11,7 @@ This plugin allows cells within a [DataTable](https://datatables.net/) to be edi
 Property | Type | Default | Example | Details  
 :------ | :------ | :------ | :-----| :------
 **onUpdate** | function |  | ```function(cell, row, oldValue){ } ``` | The call back function to be executed. The updated **[cell](https://datatables.net/reference/api/cell())**, **[row](https://datatables.net/reference/api/row())**, and previous value in that cell are passed as arguments. 
+**onValidate** _(optional)_ | function | none | ```function(cell, row, newValue){ } ``` | The call back function to be executed before updating the cell value. The relevant **[cell](https://datatables.net/reference/api/cell())**, **[row](https://datatables.net/reference/api/row())**, and new value in the editor are passed as arguments. The function should return `true` if the value is valid, or `false` if it does not pass validation logic.
 **inputCss** _(optional)_| string | none |```'my-css-class'```| A CSS class that will be applied to the input field
 **wrapperHtml** _(optional)_| string | none |```<div class="row">{content}</div>```| HTML used to wrap the inline editor. Use `{content}` as the placeholder for the inline editor.
 **columns** _(optional)_| array | All columns |```[0,1,3,4]```| An array of column indexes defining the columns that you want to be editable.
