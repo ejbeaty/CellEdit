@@ -34,9 +34,20 @@ $(document).ready(function () {
                 "options": {
                     "icon": "http://jqueryui.com/resources/demos/datepicker/images/calendar.gif" // Optional
                 }
-            }
+            },
              // Nothing specified for column 3 so it will default to text
-            
+            {
+                "column":3,
+                "type": "datalist",
+                "options":[
+                    { "value": "New York" },
+                    { "value": "London, UK" },
+                    { "value": "London, Canada" },
+                    { "value": "Mumbai" },
+                    { "value": "New Delhi" },
+                    { "value": "Sydney" }
+                ]
+            }
         ]
     });
 
