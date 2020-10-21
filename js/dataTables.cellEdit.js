@@ -101,26 +101,28 @@ jQuery.fn.dataTable.Api.register('MakeCellsEditable()', function (settings) {
     if (table != null) {
         // On cell click
         $(table.body()).on('click', 'td', function () {
+            // CHECK IF TABLE IS EMPTY
+            if (!$(this).hasClass('dataTables_empty')) {
+                var currentColumnIndex = table.cell(this).index().column;
 
-            var currentColumnIndex = table.cell(this).index().column;
+                // DETERMINE WHAT COLUMNS CAN BE EDITED
+                if ((settings.columns && settings.columns.indexOf(currentColumnIndex) > -1) || (!settings.columns)) {
+                    var row = table.row($(this).parents('tr'));
+                    editableCellsRow = row;
 
-            // DETERMINE WHAT COLUMNS CAN BE EDITED
-            if ((settings.columns && settings.columns.indexOf(currentColumnIndex) > -1) || (!settings.columns)) {
-                var row = table.row($(this).parents('tr'));
-                editableCellsRow = row;
+                    var cell = table.cell(this).node();
+                    var oldValue = table.cell(this).data();
+                    // Sanitize value
+                    oldValue = sanitizeCellValue(oldValue);
 
-                var cell = table.cell(this).node();
-                var oldValue = table.cell(this).data();
-                // Sanitize value
-                oldValue = sanitizeCellValue(oldValue);
-
-                // Show input
-                if (!$(cell).find('input').length && !$(cell).find('select').length && !$(cell).find('textarea').length) {
-                    // Input CSS
-                    var input = getInputHtml(currentColumnIndex, settings, oldValue);
-                    $(cell).html(input.html);
-                    if (input.focus) {
-                        $('#ejbeatycelledit').focus();
+                    // Show input
+                    if (!$(cell).find('input').length && !$(cell).find('select').length && !$(cell).find('textarea').length) {
+                        // Input CSS
+                        var input = getInputHtml(currentColumnIndex, settings, oldValue);
+                        $(cell).html(input.html);
+                        if (input.focus) {
+                            $('#ejbeatycelledit').focus();
+                        }
                     }
                 }
             }
@@ -219,9 +221,12 @@ function getInputHtml(currentColumnIndex, settings, oldValue) {
         case "textarea-confirm":
             input.html = startWrapperHtml + "<textarea id='ejbeatycelledit' class='" + inputCss + "'>"+oldValue+"</textarea><a href='javascript:void(0);' class='" + confirmCss + "' onclick='$(this).updateEditableCell(this)'>Confirm</a> <a href='javascript:void(0);' class='" + cancelCss + "' onclick='$(this).cancelEditableCell(this)'>Cancel</a>" + endWrapperHtml;
             break;
-	case "number-confirm" :
-	    input.html = startWrapperHtml + "<input id='ejbeatycelledit' type='number' class='" + inputCss + "' value='"+oldValue+"'" + (listenToKeys ? " onkeyup='if(event.keyCode==13) {$(this).updateEditableCell(this);} else if (event.keyCode===27) {$(this).cancelEditableCell(this);}'" : "") + "></input>&nbsp;<a href='javascript:void(0);' class='" + confirmCss + "' onclick='$(this).updateEditableCell(this)'>Confirm</a> <a href='javascript:void(0);' class='" + cancelCss + "' onclick='$(this).cancelEditableCell(this)'>Cancel</a>" + endWrapperHtml;
-	    break;
+        case "number":
+            input.html = startWrapperHtml + "<input id='ejbeatycelledit' type='number' class='" + inputCss + "' onfocusout='$(this).updateEditableCell(this)' value='" + oldValue + "'></input>" + endWrapperHtml;
+            break;
+        case "number-confirm" :
+            input.html = startWrapperHtml + "<input id='ejbeatycelledit' type='number' class='" + inputCss + "' value='"+oldValue+"'" + (listenToKeys ? " onkeyup='if(event.keyCode==13) {$(this).updateEditableCell(this);} else if (event.keyCode===27) {$(this).cancelEditableCell(this);}'" : "") + "></input>&nbsp;<a href='javascript:void(0);' class='" + confirmCss + "' onclick='$(this).updateEditableCell(this)'>Confirm</a> <a href='javascript:void(0);' class='" + cancelCss + "' onclick='$(this).cancelEditableCell(this)'>Cancel</a>" + endWrapperHtml;
+            break;
         default: // text input
             input.html = startWrapperHtml + "<input id='ejbeatycelledit' class='" + inputCss + "' onfocusout='$(this).updateEditableCell(this)' value='" + oldValue + "'></input>" + endWrapperHtml;
             break;
