@@ -49,7 +49,7 @@ jQuery.fn.dataTable.Api.register('MakeCellsEditable()', function (settings) {
                 } else if (!newValue) {
                     _addValidationCss();
                 }
-                //All columns allow null
+                // All columns allow null
             } else if (newValue && settings.onValidate) {
                 if (settings.onValidate(cell, row, newValue)) {
                     _update(newValue);
@@ -71,7 +71,7 @@ jQuery.fn.dataTable.Api.register('MakeCellsEditable()', function (settings) {
             function _update(newValue) {
                 var oldValue = cell.data();
                 cell.data(newValue);
-                //Return cell & row.
+                // Return cell & row.
                 settings.onUpdate(cell, row, oldValue);
             }
             // Get current page
