@@ -29,8 +29,8 @@ jQuery.fn.dataTable.Api.register('MakeCellsEditable()', function (settings) {
         updateEditableCell: function (callingElement) {
             // Need to redeclare table here for situations where we have more than one datatable on the page. See issue6 on github
             var table = $(callingElement).closest("table").DataTable().table();
-            var row = table.row($(callingElement).parents('tr'));
-            var cell = table.cell($(callingElement).parents('td, th'));
+            var row = table.row($(callingElement).parents('tr, li'));
+            var cell = table.cell($(callingElement).parents('td, th, li'));
             var columnIndex = cell.index().column;
             var inputField =getInputField(callingElement);
 
@@ -83,7 +83,7 @@ jQuery.fn.dataTable.Api.register('MakeCellsEditable()', function (settings) {
         // CANCEL
         cancelEditableCell: function (callingElement) {
             var table = $(callingElement.closest("table")).DataTable().table();
-            var cell = table.cell($(callingElement).parents('td, th'));
+            var cell = table.cell($(callingElement).parents('td, th, li'));
             // Set cell to it's original value
             cell.data(cell.data());
 
@@ -94,23 +94,28 @@ jQuery.fn.dataTable.Api.register('MakeCellsEditable()', function (settings) {
 
     // Destroy
     if (settings === "destroy") {
-        $(table.body()).off("click", "td");
+        $(table.body()).off("click", "td, li");
         table = null;
     }
 
     if (table != null) {
         // On cell click
-        $(table.body()).on('click', 'td', function () {
+        $(table.body()).on('click', 'td, li', function () {
 
-            var currentColumnIndex = table.cell(this).index().column;
+            var index = table.cell($(this).closest('td, li')).index();
+            if (typeof index === 'undefined')
+                return;
+            var currentColumnIndex = index.column;
 
             // DETERMINE WHAT COLUMNS CAN BE EDITED
             if ((settings.columns && settings.columns.indexOf(currentColumnIndex) > -1) || (!settings.columns)) {
-                var row = table.row($(this).parents('tr'));
+                var row = table.row($(this).closest('td, li').parents('tr, li'));
                 editableCellsRow = row;
 
-                var cell = table.cell(this).node();
-                var oldValue = table.cell(this).data();
+                var cell = $(this).find('span.dtr-data');
+                if (cell.length == 0)
+                    cell = table.cell($(this).closest('td, li')).node();
+                var oldValue = table.cell($(this).closest('td, li')).data();
                 // Sanitize value
                 oldValue = sanitizeCellValue(oldValue);
 
