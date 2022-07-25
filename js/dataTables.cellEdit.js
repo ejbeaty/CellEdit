@@ -130,9 +130,9 @@ jQuery.fn.dataTable.Api.register('MakeCellsEditable()', function (settings) {
 });
 
 function getInputHtml(currentColumnIndex, settings, oldValue) {
-    var inputSetting, inputType, input, inputCss, confirmCss, cancelCss, startWrapperHtml = '', endWrapperHtml = '', listenToKeys = false;
+    var inputSetting, inputType, input, inputCss, confirmCss, cancelCss, startWrapperHtml = '', endWrapperHtml = '', listenToKeys = false, listHasFocus = false;
 
-    input = {"focus":true,"html":null};
+    input = {"focus":true, "html":null};
 
     if(settings.inputTypes){
 		$.each(settings.inputTypes, function (index, setting) {
@@ -154,6 +154,7 @@ function getInputHtml(currentColumnIndex, settings, oldValue) {
     
     if (settings.confirmationButton) {
         if (settings.confirmationButton.listenToKeys) { listenToKeys = settings.confirmationButton.listenToKeys; }
+        if (settings.confirmationButton.listHasFocus) { listHasFocus = settings.confirmationButton.listHasFocus; }
         confirmCss = settings.confirmationButton.confirmCss;
         cancelCss = settings.confirmationButton.cancelCss;
         inputType = inputType + "-confirm";
@@ -169,7 +170,10 @@ function getInputHtml(currentColumnIndex, settings, oldValue) {
                 }
             });
             input.html = input.html + "</select>" + endWrapperHtml;
-            input.focus = false;
+            if (listHasFocus)
+                input.focus = true;
+            else
+                input.focus = false;
             break;
         case "list-confirm": // List w/ confirm
             input.html = startWrapperHtml + "<select class='" + inputCss + "'>";
@@ -181,7 +185,10 @@ function getInputHtml(currentColumnIndex, settings, oldValue) {
                 }
             });
             input.html = input.html + "</select>&nbsp;<a href='javascript:void(0);' class='" + confirmCss + "' onclick='$(this).updateEditableCell(this);'>Confirm</a> <a href='javascript:void(0);' class='" + cancelCss + "' onclick='$(this).cancelEditableCell(this)'>Cancel</a>" + endWrapperHtml;
-            input.focus = false;
+            if (listHasFocus)
+                input.focus = true;
+            else
+                input.focus = false;
             break;
         case "datepicker": //Both datepicker options work best when confirming the values
         case "datepicker-confirm":
